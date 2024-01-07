@@ -5,7 +5,7 @@ import json
 import openai
 
 app = Flask(__name__)
-openai.api_key = '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'
+openai.api_key = 'YOUR_API'
 
 @app.route('/api/v1/ocr', methods=['POST'])
 def ocr_api():
