@@ -1,0 +1,25 @@
+{
+  "name": "macos_app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "browserify-fs": "^1.0.0",
+    "elecrton": "^0.0.1-security",
+    "electron": "^25.2.0",
+    "electron-screenshot": "^1.0.5",
+    "form-data": "^4.0.0",
+    "fs": "^0.0.1-security",
+    "lodash": "^4.17.21",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "electron-packager": "^17.1.1"
+  }
+}

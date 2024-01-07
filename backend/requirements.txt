@@ -1,0 +1,7 @@
+Flask
+Pillow
+pytesseract
+openai
+requests
+jsonify
+request

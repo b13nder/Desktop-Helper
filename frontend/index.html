@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Electron Screenshot App</title>
+  <style>
+    #response-container,
+    #newChat,
+    #chat {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+      font-family: "San Francisco", sans-serif;
+      margin-left: 1em;
+      margin-right: 1em;
+      max-width: 400px; 
+    }
+
+    #chat,
+    #newChat {
+      margin-top: 25px;
+    }
+  </style>
+</head>
+<body>
+  <div id="response-container"></div>
+  <div id="newChat">
+    <button onclick="clearText()">Clear Text</button>
+  </div>
+  <div id="inputContainer">
+    <input type="text" id="message" placeholder="Введите текст">
+    <button onclick="askQuestion()">Отправить текст</button>
+  </div>
+  <div id="responseText"></div>
+  <script>
+    const { ipcRenderer } = require('electron');
+    ipcRenderer.on('screenshotSaved', (event, message) => {
+      console.log(message);
+    });
+
+    function clearText() {
+      const responseText = document.getElementById('responseText');
+      const messageInput = document.getElementById('message');
+      responseText.textContent = '';
+    }
+
+    ipcRenderer.on('receiveResponse', (event, response) => {
+      const responseText = document.getElementById('responseText');
+      responseText.textContent = response;
+    });
+
+    function takeScreenshot() {
+      ipcRenderer.send('takeScreenshot');
+    }
+
+    ipcRenderer.on("apiResponse", (event, responseData) => {
+      const responseContainer = document.getElementById("response-container");
+      const responseObj = JSON.parse(responseData);
+      responseContainer.textContent = responseObj.response;
+    });
+ 
+
+    function askQuestion() {
+      const messageInput = document.getElementById('message');
+      const message = messageInput.value;
+
+      if (message.trim() === '') {
+        return;
+      }
+
+      const url = 'http://127.0.0.1:5002/api/v1/ocr';
+      const formData = new FormData();
+      formData.append('message', message);
+
+      fetch(url, {
+        method: 'POST',
+        body: formData,
+        headers: {
+         
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          const responseText = data.response;
+          const responseContainer = document.getElementById('response-container');
+          responseContainer.textContent = responseText;
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+
+      messageInput.value = '';
+    }
+  </script>
+</body>
+</html>
